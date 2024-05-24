@@ -20,6 +20,9 @@ init({
 function App() {
   const [invoice, setInvoice] = React.useState<Invoice | undefined>(undefined);
   const [preimage, setPreimage] = React.useState<string | undefined>(undefined);
+  const [createdInvoice, setCreatedInvoice] = React.useState<
+    string | undefined
+  >(undefined);
   const [paymentModalSetPaidFunction, setPaymentModalSetPaidFunction] =
     React.useState<((response: SendPaymentResponse) => void) | undefined>(
       undefined
@@ -77,6 +80,19 @@ function App() {
       if (!result?.preimage) {
         throw new Error('Payment failed. Please try again');
       }
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async function makeInvoice() {
+    try {
+      const provider = await requestProvider();
+      const invoice = await provider.makeInvoice({
+        amount: 10,
+        defaultMemo: 'Paid with Bitcoin Connect (React Demo)',
+      });
+      setCreatedInvoice(invoice.paymentRequest);
     } catch (error) {
       alert(error);
     }
@@ -146,6 +162,11 @@ function App() {
       >
         Programmatically launch modal to pay invoice (LNURL-verify)
       </button>
+      <br />
+      <button style={{marginTop: '16px'}} onClick={makeInvoice}>
+        Make invoice
+      </button>
+      {createdInvoice && <p>Created invoice: {createdInvoice}</p>}
       <br />
       <div style={{maxWidth: '448px'}}>
         <h2>Connect component</h2>

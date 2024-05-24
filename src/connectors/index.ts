@@ -9,6 +9,7 @@ export const connectors = {
   'nwc.generic': NWCConnector,
   'nwc.mutiny': NWCConnector,
   'nwc.umbrel': NWCConnector,
+  'nwc.uma': NWCConnector,
   lnbits: LnbitsConnector,
   lnc: LNCConnector,
 };

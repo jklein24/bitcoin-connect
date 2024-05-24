@@ -8,12 +8,14 @@ import './pages/bc-lnbits.js';
 import './pages/bc-umbrel.js';
 import './pages/bc-send-payment.js';
 import './pages/bc-new-wallet.js';
+import './pages/bc-uma.js';
 
 export const routes = {
   '/start': html`<bc-start class="flex w-full"></bc-start>`,
   '/help': html`<bc-help class="flex w-full"></bc-help>`,
   '/nwc': html`<bc-nwc class="flex w-full"></bc-nwc>`,
   '/mutiny': html`<bc-mutiny class="flex w-full"></bc-mutiny>`,
+  '/uma': html`<bc-uma class="flex w-full"></bc-uma>`,
   '/lnbits': html`<bc-lnbits class="flex w-full"></bc-lnbits>`,
   '/umbrel': html`<bc-umbrel class="flex w-full"></bc-umbrel>`,
   /*(params) => {

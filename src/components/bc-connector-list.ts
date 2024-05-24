@@ -14,6 +14,7 @@ export class ConnectorList extends withTwind()(BitcoinConnectElement) {
     // TODO: allow re-ordering connectors
     const connectors: TemplateResult<1>[] = [];
     connectors.push(html`<bc-alby-nwc-connector></bc-alby-nwc-connector>`);
+    connectors.push(html`<bc-uma-nwc-connector></bc-uma-nwc-connector>`);
     connectors.push(html`<bc-mutiny-nwc-connector></bc-mutiny-nwc-connector>`);
     connectors.push(html`<bc-umbrel-nwc-connector></bc-umbrel-nwc-connector>`);
     connectors.push(html`<bc-nwc-connector></bc-nwc-connector>`);
