@@ -23,10 +23,25 @@ function App() {
   const [createdInvoice, setCreatedInvoice] = React.useState<
     string | undefined
   >(undefined);
+  const [umaAddress, setUmaAddress] = React.useState<string | undefined>(
+    undefined
+  );
+  const [lookupResult, setLookupResult] = React.useState<string | undefined>(
+    undefined
+  );
   const [paymentModalSetPaidFunction, setPaymentModalSetPaidFunction] =
     React.useState<((response: SendPaymentResponse) => void) | undefined>(
       undefined
     );
+  const [quoteCurrency, setQuoteCurrency] = React.useState<string | undefined>(
+    undefined
+  );
+  const [quoteAmount, setQuoteAmount] = React.useState<number | undefined>(
+    undefined
+  );
+  const [quoteResult, setQuoteResult] = React.useState<string | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
     (async () => {
@@ -93,6 +108,79 @@ function App() {
         defaultMemo: 'Paid with Bitcoin Connect (React Demo)',
       });
       setCreatedInvoice(invoice.paymentRequest);
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async function lookupUser() {
+    if (!umaAddress) {
+      alert('Please enter UMA address');
+      return;
+    }
+    try {
+      const provider = await requestProvider();
+      if (!provider.lookupUser) {
+        throw new Error('Provider does not support lookupUser');
+      }
+      const result = await provider.lookupUser({lud16: umaAddress});
+      setLookupResult(JSON.stringify(result, null, 2));
+      setQuoteCurrency(result.currencies[0].code);
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async function fetchQuote() {
+    try {
+      const provider = await requestProvider();
+      if (!provider.fetchQuote) {
+        throw new Error('Provider does not support fetchQuote');
+      }
+      if (!quoteAmount || isNaN(quoteAmount)) {
+        throw new Error('Please enter amount');
+      }
+      if (quoteAmount < 0) {
+        throw new Error('Amount should be greater than 0');
+      }
+      if (lookupResult === undefined) {
+        throw new Error('Please lookup user first');
+      }
+      if (!umaAddress) {
+        throw new Error('Please enter UMA address');
+      }
+      const lookupResultObject = JSON.parse(lookupResult);
+      if (!lookupResultObject || !lookupResultObject.currencies) {
+        throw new Error('Invalid lookup result');
+      }
+      const firstCurrencyCode = lookupResultObject.currencies[0].code;
+      const result = await provider.fetchQuote({
+        lockedCurrencyAmount: quoteAmount,
+        receivingCurrencyCode: quoteCurrency || firstCurrencyCode,
+        sendingCurrencyCode: 'SAT',
+        receivingAddress: umaAddress,
+        lockedCurrencySide: 'RECEIVING',
+      });
+      console.log(result);
+      setQuoteResult(JSON.stringify(result, null, 2));
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async function executeQuote() {
+    try {
+      const provider = await requestProvider();
+      if (!provider.executeQuote) {
+        throw new Error('Provider does not support executeQuote');
+      }
+      if (!quoteResult) {
+        throw new Error('Please fetch quote first');
+      }
+      const result = await provider.executeQuote({
+        paymentHash: JSON.parse(quoteResult).paymentHash,
+      });
+      alert(`Success! ${JSON.stringify(result, null, 2)}`);
     } catch (error) {
       alert(error);
     }
@@ -167,6 +255,47 @@ function App() {
         Make invoice
       </button>
       {createdInvoice && <p>Created invoice: {createdInvoice}</p>}
+      <br />
+      <input
+        type="text"
+        placeholder="Enter UMA address to lookup"
+        value={umaAddress}
+        onChange={(e) => setUmaAddress(e.target.value)}
+      />
+      <button style={{marginTop: '16px'}} onClick={lookupUser}>
+        Lookup user
+      </button>
+      <br />
+      {lookupResult && (
+        <div>
+          <pre>{lookupResult}</pre>
+          <br />
+          <select onChange={(e) => setQuoteCurrency(e.target.value)}>
+            {JSON.parse(lookupResult).currencies.map(
+              (currency: {code: string; name: string}) => (
+                <option key={currency.code} value={currency.code}>
+                  {currency.name}
+                </option>
+              )
+            )}
+          </select>
+          <input
+            type="number"
+            placeholder="Enter amount to quote"
+            value={quoteAmount}
+            onChange={(e) => setQuoteAmount(Number(e.target.value))}
+          />
+          <button onClick={fetchQuote}>Fetch quote</button>
+          <br />
+          {quoteResult && (
+            <div>
+              <pre>{quoteResult}</pre>
+              <br />
+              <button onClick={executeQuote}>Pay with quote</button>
+            </div>
+          )}
+        </div>
+      )}
       <br />
       <div style={{maxWidth: '448px'}}>
         <h2>Connect component</h2>

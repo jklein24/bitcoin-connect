@@ -221,7 +221,7 @@ __metadata:
     "@lightninglabs/lnc-web": ^0.3.1-alpha
     qrcode-generator: ^1.4.4
     zustand: ^4.5.2
-  checksum: b3a174ea5e74ac408d1e152065b2cf09e3b252bb9785c5afe0feaf1cbade172e24a16534b58849aec4c5601334101038c55bf075fe41d24d9f4dd5c685710b60
+  checksum: facbb5a32ff29a5cd097c28448cf9fbda4ba3b01007073840932c04e767c6595cfab5f9ee0dcf77a6b5ffd3cf1b7060507386371a2ebd16915b70c5cf6c16360
   languageName: node
   linkType: hard
 
@@ -232,13 +232,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@getalby/sdk@npm:^3.5.1":
+"@getalby/sdk@file:/Users/jeremyklein/Dev/bitcoin-connect/alby-js-sdk.tgz::locator=react%40workspace%3A.":
   version: 3.5.1
-  resolution: "@getalby/sdk@npm:3.5.1"
+  resolution: "@getalby/sdk@file:/Users/jeremyklein/Dev/bitcoin-connect/alby-js-sdk.tgz::locator=react%40workspace%3A."
   dependencies:
     eventemitter3: ^5.0.1
     nostr-tools: ^1.17.0
-  checksum: 80b04594b3003fd43341693948fc1ea2b22f5edead5abeb9f459d0837b400cd4d64a83c89231d9ca1fbcd85dec66d58a8c2b55e20e016a7ec3b68c357605d4e7
+  checksum: ea52ca5c13d9f8f73677de95812eb82b7e77a6d3df7a69bb817e3d622e5bbb79f7cfaed110a3214ec3faac1636a99cb16a5d9ac36452e2a627588643ff97ae5c
   languageName: node
   linkType: hard
 
@@ -732,10 +732,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webbtc/webln-types@npm:^1.0.13":
-  version: 1.0.14
-  resolution: "@webbtc/webln-types@npm:1.0.14"
-  checksum: eaa363bf3a9c278be51c93487904c04518e8812d97449d8d7866089aae74756451a48245a31b1a0fd591bc4798a96a29516ad395b8828c9f2af920cf65a305ac
+"@webbtc/webln-types@file:../webbtc-webln-types-3.0.0.tgz::locator=react%40workspace%3A.":
+  version: 3.0.0
+  resolution: "@webbtc/webln-types@file:../webbtc-webln-types-3.0.0.tgz::locator=react%40workspace%3A."
+  checksum: 13a7ef18c54e843f25a090d5d38841f002acc45e2b37cdd991ab4827eca91b4ae8e1a86535598413b16e26005c7d4baac55a8ac3841fc6decd013c098b63161e
   languageName: node
   linkType: hard
 
@@ -2240,7 +2240,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
     "@vitejs/plugin-react-swc": ^3.3.2
-    "@webbtc/webln-types": ^1.0.13
+    "@webbtc/webln-types": ../webbtc-webln-types-3.0.0.tgz
     eslint: ^8.45.0
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.3

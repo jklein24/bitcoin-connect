@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",
-    "@webbtc/webln-types": "^1.0.13",
+    "@webbtc/webln-types": "../webbtc-webln-types-3.0.0.tgz",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
@@ -30,6 +30,7 @@
     "vite": "^4.4.5"
   },
   "resolutions": {
-    "@getalby/bitcoin-connect": "/Users/jeremyklein/Dev/bitcoin-connect/demos/package.tgz"
+    "@getalby/bitcoin-connect": "/Users/jeremyklein/Dev/bitcoin-connect/demos/package.tgz",
+    "@getalby/sdk": "/Users/jeremyklein/Dev/bitcoin-connect/alby-js-sdk.tgz"
   }
 }

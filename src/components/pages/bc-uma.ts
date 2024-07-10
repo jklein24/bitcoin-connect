@@ -56,8 +56,12 @@ export class UmaPage extends withTwind()(BitcoinConnectElement) {
     }
 
     const addressDomain = addressParts[1];
+    const isLocal =
+      addressDomain.startsWith('localhost:') ||
+      addressDomain.endsWith('.local');
+    const protocol = isLocal ? 'http' : 'https';
     const nwc = webln.NostrWebLNProvider.withNewSecret({
-      authorizationUrl: `http://${addressDomain}/apps/new`,
+      authorizationUrl: `${protocol}://${addressDomain}/apps/new`,
       relayUrl: 'wss://relay.getalby.com/v1', // TODO: use custom relay from providerConfig
       walletPubkey:
         'a421a5e2a615eff3b797be5318e4e687df4b100748cfaa8d0b390ce659906d8f',
