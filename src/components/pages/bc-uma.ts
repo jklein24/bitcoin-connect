@@ -5,7 +5,7 @@ import {html} from 'lit';
 import '../internal/bci-button';
 import {classes} from '../css/classes';
 import store from '../../state/store';
-import {webln} from '@getalby/sdk';
+import {NWCClient} from '@getalby/sdk/dist/NWCClient';
 
 @customElement('bc-uma')
 export class UmaPage extends withTwind()(BitcoinConnectElement) {
@@ -60,7 +60,7 @@ export class UmaPage extends withTwind()(BitcoinConnectElement) {
       addressDomain.startsWith('localhost:') ||
       addressDomain.endsWith('.local');
     const protocol = isLocal ? 'http' : 'https';
-    const nwc = webln.NostrWebLNProvider.withNewSecret({
+    const nwc = NWCClient.withNewSecret({
       authorizationUrl: `${protocol}://${addressDomain}/apps/new`,
       relayUrl: 'wss://relay.getalby.com/v1', // TODO: use custom relay from providerConfig
       walletPubkey:
