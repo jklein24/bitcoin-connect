@@ -221,7 +221,7 @@ __metadata:
     "@lightninglabs/lnc-web": ^0.3.1-alpha
     qrcode-generator: ^1.4.4
     zustand: ^4.5.2
-  checksum: facbb5a32ff29a5cd097c28448cf9fbda4ba3b01007073840932c04e767c6595cfab5f9ee0dcf77a6b5ffd3cf1b7060507386371a2ebd16915b70c5cf6c16360
+  checksum: d31bbb3a806dab6434ff4060fa451fa39126171ab2ed6686e163d5e0a39390ab9d99a806fe680c6843754936ed9aa0ba9b7de5459edb6451aeccb884f7c4b941
   languageName: node
   linkType: hard
 

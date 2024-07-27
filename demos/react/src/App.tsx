@@ -15,6 +15,14 @@ import {SendPaymentResponse} from '@webbtc/webln-types';
 
 init({
   appName: 'Bitcoin Connect (React Demo)',
+  providerConfig: {
+    uma: {
+      callbackUrl: window.location.href,
+      identityNpub:
+        'npub1mjkxztcmws45vn04u5gtrr6smyt0pyzvn7ag6q4uzgnguzkwcw5saxkfm0',
+      identityRelayUrl: 'wss://nos.lol',
+    },
+  },
 });
 
 function App() {

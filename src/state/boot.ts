@@ -3,6 +3,11 @@ import {ConnectorConfig} from '../types/ConnectorConfig';
 import store from './store';
 
 function loadConfig() {
+  const oauthState = window.localStorage.getItem('bc:oauthState');
+  if (oauthState) {
+    store.getState().setOauthState(JSON.parse(oauthState));
+  }
+
   const configJson = window.localStorage.getItem('bc:config');
   if (configJson) {
     const config = JSON.parse(configJson) as ConnectorConfig;

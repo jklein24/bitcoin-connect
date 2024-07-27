@@ -9,6 +9,20 @@ import {
   DEFAULT_BITCOIN_CONNECT_CONFIG,
 } from '../types/BitcoinConnectConfig';
 
+type OAuthState = {
+  codeVerifier: string;
+  state?: string;
+  umaConfig?: {
+    callbackUrl: string;
+    identityNpub: string;
+    identityRelayUrl: string;
+    umaDomain: string;
+    refreshToken?: string;
+    accessToken?: string;
+    accessTokenExpiresAt?: number;
+  };
+};
+
 interface Store {
   readonly route: Route;
   readonly routeHistory: Route[];
@@ -23,6 +37,7 @@ interface Store {
   readonly connectorConfig: ConnectorConfig | undefined;
   readonly bitcoinConnectConfig: BitcoinConnectConfig;
   readonly info: GetInfoResponse | undefined;
+  readonly oAuthState: OAuthState | undefined;
 
   connect(config: ConnectorConfig): void;
   disconnect(): void;
@@ -33,6 +48,7 @@ interface Store {
   clearRouteHistory(): void;
   setModalOpen(modalOpen: boolean): void;
   setCurrency(currency: string | undefined): void;
+  setOauthState(oAuthState: OAuthState | undefined): void;
   supports(weblnMethod: WebLNMethod): boolean;
 
   // provider functions
@@ -57,6 +73,7 @@ const store = createStore<Store>((set, get) => ({
   connectorConfig: undefined,
   bitcoinConnectConfig: DEFAULT_BITCOIN_CONNECT_CONFIG,
   info: undefined,
+  oAuthState: undefined,
   connect: async (connectorConfig: ConnectorConfig) => {
     set({
       connecting: true,
@@ -150,6 +167,14 @@ const store = createStore<Store>((set, get) => ({
       window.localStorage.removeItem('bc:currency');
     }
     set({currency});
+  },
+  setOauthState: (oAuthState) => {
+    set({oAuthState});
+    if (oAuthState) {
+      window.localStorage.setItem('bc:oauthState', JSON.stringify(oAuthState));
+    } else {
+      window.localStorage.removeItem('bc:oauthState');
+    }
   },
   // TODO: move this method to Alby JS SDK NWCCLient
   supports: (method: WebLNMethod) => {

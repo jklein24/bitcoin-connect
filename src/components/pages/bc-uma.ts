@@ -5,7 +5,8 @@ import {html} from 'lit';
 import '../internal/bci-button';
 import {classes} from '../css/classes';
 import store from '../../state/store';
-import {NWCClient} from '@getalby/sdk/dist/NWCClient';
+import {auth} from '@getalby/sdk';
+import {baseUrlFromUmaDomain} from '../../utils/uma';
 
 @customElement('bc-uma')
 export class UmaPage extends withTwind()(BitcoinConnectElement) {
@@ -56,27 +57,46 @@ export class UmaPage extends withTwind()(BitcoinConnectElement) {
     }
 
     const addressDomain = addressParts[1];
-    const isLocal =
-      addressDomain.startsWith('localhost:') ||
-      addressDomain.endsWith('.local');
-    const protocol = isLocal ? 'http' : 'https';
-    const nwc = NWCClient.withNewSecret({
-      authorizationUrl: `${protocol}://${addressDomain}/apps/new`,
-      relayUrl: 'wss://relay.getalby.com/v1', // TODO: use custom relay from providerConfig
-      walletPubkey:
-        'a421a5e2a615eff3b797be5318e4e687df4b100748cfaa8d0b390ce659906d8f',
-    });
+    const baseUrl = baseUrlFromUmaDomain(addressDomain);
+
     const providerConfig = store.getState().bitcoinConnectConfig.providerConfig;
-    await nwc.initNWC({
-      ...(providerConfig?.nwc?.authorizationUrlOptions || {}),
-      name: this._appName,
+    const umaConfig = providerConfig?.uma ?? {
+      callbackUrl: 'localhost:8080/callback',
+      identityNpub: 'npub',
+      identityRelayUrl: 'wss://nos.lol',
+    };
+    const authClient = new auth.OAuth2User({
+      client_id: `${umaConfig.identityNpub} ${umaConfig.identityRelayUrl}`,
+      callback: umaConfig.callbackUrl,
+      scopes: [],
+      user_agent: 'bc-uma',
+      request_options: {
+        base_url: baseUrl,
+      },
     });
 
-    store.getState().connect({
-      nwcUrl: nwc.getNostrWalletConnectUrl(true),
-      connectorName: 'UMA NWC',
-      connectorType: 'nwc.uma',
+    const authUrl = await authClient.generateAuthURL({
+      authorizeUrl: `${baseUrl}/oauth/auth`,
+      code_challenge_method: 'S256',
+      ...(providerConfig?.nwc?.authorizationUrlOptions || {}),
     });
+    store.getState().setOauthState({
+      codeVerifier: authClient.code_verifier || '',
+      umaConfig: {
+        ...umaConfig,
+        umaDomain: addressDomain,
+      },
+    });
+
+    window.localStorage.setItem(
+      'bc:config',
+      JSON.stringify({
+        connectorName: 'UMA NWC',
+        connectorType: 'nwc.uma',
+      })
+    );
+
+    window.location.href = authUrl;
   }
 }
 
